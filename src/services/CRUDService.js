@@ -26,9 +26,9 @@ let createNewUser = async (data) => {
         }
     });
     
-    console.log('data from service');
-    console.log(data);
-    console.log(hashPasswordFromBcrypt);
+    // console.log('data from service');
+    // console.log(data);
+    // console.log(hashPasswordFromBcrypt);
 }
 
 let hashUserPassword = (password) => {

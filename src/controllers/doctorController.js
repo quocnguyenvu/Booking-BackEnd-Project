@@ -2,7 +2,7 @@ import doctorService from '../services/doctorService';
 
 let getTopDoctorHome = async (req, res) => {
     let limit = req.query.limit;
-    if(!limit) limit = 10;
+    if(!limit) limit = 4;
     try {
         let response = await doctorService.getTopDoctorHome(+limit);
         return res.status(200).json(response);
@@ -159,31 +159,17 @@ let sendBlockedNotification = async (req, res) => {
     }
 }
 
-let getSearchDoctor = async (req, res) => {
-    try {
-        let infor = await doctorService.getSearchDoctor(req.query.firstName);
-        return res.status(200).json(infor);
-    } catch (e) {
-        console.log(e);
-        return res.status(200).json({
-            errCode: -1,
-            errMessage: 'Error from the server !'
-        })
-    }
-}
-
 module.exports = {
-    getTopDoctorHome: getTopDoctorHome,
-    getAllDoctors: getAllDoctors,
-    postInforDoctor: postInforDoctor,
-    getDetailDoctorById: getDetailDoctorById,
-    bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByDate: getScheduleByDate,
-    getExtraInforDoctorById: getExtraInforDoctorById,
-    getProfileDoctorById: getProfileDoctorById,
-    getListPatientForDoctor: getListPatientForDoctor,
-    sendRemedy: sendRemedy,
-    sendOnlineClinic: sendOnlineClinic,
-    sendBlockedNotification: sendBlockedNotification,
-    getSearchDoctor
+  getTopDoctorHome: getTopDoctorHome,
+  getAllDoctors: getAllDoctors,
+  postInforDoctor: postInforDoctor,
+  getDetailDoctorById: getDetailDoctorById,
+  bulkCreateSchedule: bulkCreateSchedule,
+  getScheduleByDate: getScheduleByDate,
+  getExtraInforDoctorById: getExtraInforDoctorById,
+  getProfileDoctorById: getProfileDoctorById,
+  getListPatientForDoctor: getListPatientForDoctor,
+  sendRemedy: sendRemedy,
+  sendOnlineClinic: sendOnlineClinic,
+  sendBlockedNotification: sendBlockedNotification,
 }
