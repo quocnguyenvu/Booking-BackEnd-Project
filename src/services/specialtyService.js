@@ -99,7 +99,7 @@ let getDetailSpecialtyById = (inputId, location) => {
                 if(data){
                     let doctorSpecialty = [];
                     if(location === 'ALL') {
-                        doctorSpecialty = await db.Doctor_Infor.findAll({
+                        doctorSpecialty = await db.Doctor_infor.findAll({
                             where: {
                                 specialtyId: inputId,
                             },
@@ -107,7 +107,7 @@ let getDetailSpecialtyById = (inputId, location) => {
                         })
                     } else {
                         // find by location
-                        doctorSpecialty = await db.Doctor_Infor.findAll({
+                        doctorSpecialty = await db.Doctor_infor.findAll({
                             where: {
                                 specialtyId: inputId,
                                 provinceId: location

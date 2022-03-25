@@ -120,8 +120,8 @@ let saveDetailInforDoctor = (data) => {
                 }
 
 
-                // Insert to Doctor_Infor
-                let doctorInfor = await db.Doctor_Infor.findOne({
+                // Insert to Doctor_infor
+                let doctorInfor = await db.Doctor_infor.findOne({
                     where: {
                         doctorId: data.doctorId
                     },
@@ -142,7 +142,7 @@ let saveDetailInforDoctor = (data) => {
                     await doctorInfor.save();
                 } else {
                     // create
-                    await db.Doctor_Infor.create({
+                    await db.Doctor_infor.create({
                         doctorId: data.doctorId,
                         priceId: data.selectedPrice,
                         paymentId: data.selectedPayment,
@@ -190,7 +190,7 @@ let getDetailDoctorById = (inputId) => {
 
                         },
                         { 
-                            model: db.Doctor_Infor,
+                            model: db.Doctor_infor,
                             attributes: {
                                 exclude: ['id', 'doctorId']
                             },
@@ -255,18 +255,18 @@ let  bulkCreateSchedule = (data) => {
                 }
 
                 let existing = await db.Schedule.findAll({
-                    where: { doctorId: data.doctorId, date: data.formatedDate },
+                    where: { doctorId: data.doctorId, date: '' + data.formatedDate },
                     attributes: ['timeType', 'date', 'doctorId', 'maxNumber'],
                     raw: true
                 });
 
                 //convert date
-                // if (existing && existing.length > 0) {
-                //   existing = existing.map(item => {
-                //     item.date = new Date(item.date).getTime();
-                //     return item;
-                //   })
-                // }
+                if (existing && existing.length > 0) {
+                  existing = existing.map(item => {
+                    item.date = new Date(item.date).getTime();
+                    return item;
+                  })
+                }
 
                 // compare different
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
@@ -340,7 +340,7 @@ let getExtraInforDoctorById = (doctorId) => {
                     errMessage: 'Missing required parameter !'
                 })
             } else {
-                let data = await db.Doctor_Infor.findOne({
+                let data = await db.Doctor_infor.findOne({
                     where: {
                         doctorId: doctorId
                     },
@@ -402,7 +402,7 @@ let getProfileDoctorById = (inputId) => {
 
                         },
                         { 
-                            model: db.Doctor_Infor,
+                            model: db.Doctor_infor,
                             attributes: {
                                 exclude: ['id', 'doctorId']
                             },

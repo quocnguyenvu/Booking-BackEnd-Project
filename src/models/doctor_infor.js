@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Doctor_Infor extends Model {
+  class Doctor_infor extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Doctor_Infor.belongsTo(models.User, { foreignKey: 'doctorId' })
+      Doctor_infor.belongsTo(models.User, { foreignKey: 'doctorId' })
 
-      Doctor_Infor.belongsTo(models.Allcode, { foreignKey: 'priceId', targetKey: 'keyMap', as: 'priceIdData' })
-      Doctor_Infor.belongsTo(models.Allcode, { foreignKey: 'paymentId', targetKey: 'keyMap', as: 'paymentIdData' })
-      Doctor_Infor.belongsTo(models.Allcode, { foreignKey: 'provinceId', targetKey: 'keyMap', as: 'provinceIdData' })
+      Doctor_infor.belongsTo(models.Allcode, { foreignKey: 'priceId', targetKey: 'keymap', as: 'priceIdData' })
+      Doctor_infor.belongsTo(models.Allcode, { foreignKey: 'paymentId', targetKey: 'keymap', as: 'paymentIdData' })
+      Doctor_infor.belongsTo(models.Allcode, { foreignKey: 'provinceId', targetKey: 'keymap', as: 'provinceIdData' })
 
 
     }
   };
-  Doctor_Infor.init({
+  Doctor_infor.init({
     doctorId: DataTypes.INTEGER,
     specialtyId: DataTypes.INTEGER,
     clinicId: DataTypes.INTEGER,
@@ -33,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     count: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'Doctor_Infor',
+    modelName: 'Doctor_infor',
     freezeTableName: true
   });
-  return Doctor_Infor;
+  return Doctor_infor;
 };

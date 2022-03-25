@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       Allcode.hasMany(models.User, {foreignKey: 'positionId', as: 'positonData'})
       Allcode.hasMany(models.User, {foreignKey: 'gender', as: 'genderData'})
 
-      Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'priceId', as: 'priceIdData'})
-      Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'paymentId', as: 'paymentIdData'})
-      Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'provinceId', as: 'provinceIdData'})
+      Allcode.hasMany(models.Doctor_infor, {foreignKey: 'priceId', as: 'priceIdData'})
+      Allcode.hasMany(models.Doctor_infor, {foreignKey: 'paymentId', as: 'paymentIdData'})
+      Allcode.hasMany(models.Doctor_infor, {foreignKey: 'provinceId', as: 'provinceIdData'})
 
       Allcode.hasMany(models.Patient, {foreignKey: 'gender', as: 'genderIdData'})
 
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
 
   
   Allcode.init({
-    keyMap: DataTypes.STRING,
+    keymap: DataTypes.STRING,
     type: DataTypes.STRING,
     valueEn: DataTypes.STRING,
     valueVi: DataTypes.STRING
