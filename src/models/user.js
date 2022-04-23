@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,32 +11,46 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
 
       // 1 user - n allcode
-      User.belongsTo(models.Allcode, { foreignKey: 'positionId', targetKey: 'keymap', as: 'positionData' })
-      User.belongsTo(models.Allcode, { foreignKey: 'gender', targetKey: 'keymap', as: 'genderData' })
+      User.belongsTo(models.Allcode, {
+        foreignKey: 'positionId',
+        targetKey: 'keymap',
+        as: 'positionData',
+      });
+      User.belongsTo(models.Allcode, {
+        foreignKey: 'gender',
+        targetKey: 'keymap',
+        as: 'genderData',
+      });
 
       // 1 user - 1 markdown
-      User.hasOne(models.Markdown, { foreignKey: 'doctorId' })
+      User.hasOne(models.Markdown, { foreignKey: 'doctorId' });
       // 1 user - 1 Doctor_infor
-      User.hasOne(models.Doctor_infor, { foreignKey: 'doctorId' })
+      User.hasOne(models.Doctor_infor, { foreignKey: 'doctorId' });
 
       // 1 user n schedule
-      User.hasMany(models.Schedule, { foreignKey: 'doctorId', as: 'doctorIdData' })
+      User.hasMany(models.Schedule, {
+        foreignKey: 'doctorId',
+        as: 'doctorIdData',
+      });
     }
-  };
-  User.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    address: DataTypes.STRING,
-    phoneNumber: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    image: DataTypes.STRING,
-    roleId: DataTypes.STRING,
-    positionId: DataTypes.STRING,
-    }, {
-    sequelize,
-    modelName: 'User',
-  });
+  }
+  User.init(
+    {
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      firstName: DataTypes.STRING,
+      lastName: DataTypes.STRING,
+      address: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      gender: DataTypes.STRING,
+      image: DataTypes.STRING,
+      roleId: DataTypes.STRING,
+      positionId: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'User',
+    }
+  );
   return User;
 };

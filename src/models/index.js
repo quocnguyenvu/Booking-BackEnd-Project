@@ -13,24 +13,24 @@ const db = {};
 let sequelize;
 const config = {
   host: process.env.DB_HOST,
-    dialect: 'postgres',
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
     },
-    query: {
-      "raw": true
-    },
-    timezone: "+07:00"
-}
+  },
+  query: {
+    raw: true,
+  },
+  timezone: '+07:00',
+};
 
 sequelize = new Sequelize(
-  process.env.DB_DATABASE_NAME, 
-  process.env.DB_USERNAME, 
-  process.env.DB_PASSWORD, 
+  process.env.DB_DATABASE_NAME,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
   config
 );
 
@@ -40,17 +40,21 @@ sequelize = new Sequelize(
 //   sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+    );
   })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(
+      sequelize,
+      Sequelize.DataTypes
+    );
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
