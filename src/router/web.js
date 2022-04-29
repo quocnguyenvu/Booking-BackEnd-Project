@@ -73,6 +73,7 @@ let initWebRoutes = (app) => {
 
   // ---------------- specialtyController ----------------
   router.get('/api/get-all-specialty', specialtyController.getAllSpecialty);
+  router.get('/api/get-top-specialty', specialtyController.getTopSpecialty);
   router.get(
     '/api/get-detail-specialty-by-id',
     specialtyController.getDetailSpecialtyById
@@ -89,6 +90,8 @@ let initWebRoutes = (app) => {
 
   // ---------------- clinicController ----------------
   router.get('/api/get-all-clinic', clinicController.getAllClinic);
+  router.get('/api/get-top-clinic', clinicController.getTopClinic);
+
   router.get(
     '/api/get-detail-clinic-by-id',
     clinicController.getDetailClinicById

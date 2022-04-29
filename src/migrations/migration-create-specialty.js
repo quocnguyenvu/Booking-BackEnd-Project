@@ -20,6 +20,9 @@ module.exports = {
       descriptionMarkdown: {
         type: Sequelize.TEXT,
       },
+      clinicId: {
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

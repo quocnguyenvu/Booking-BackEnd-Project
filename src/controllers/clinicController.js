@@ -2,8 +2,8 @@ import clinicService from '../services/clinicService';
 
 let createNewClinic = async (req, res) => {
   try {
-    let infor = await clinicService.createNewClinic(req.body);
-    return res.status(200).json(infor);
+    let response = await clinicService.createNewClinic(req.body);
+    return res.status(200).json(response);
   } catch (e) {
     console.log(e);
     return res.status(200).json({
@@ -26,10 +26,25 @@ let getAllClinic = async (req, res) => {
   }
 };
 
+let getTopClinic = async (req, res) => {
+  let limit = req.query.limit;
+  if (!limit) limit = 4;
+  try {
+    let response = await clinicService.getTopClinic(+limit);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
+};
+
 let getDetailClinicById = async (req, res) => {
   try {
-    let infor = await clinicService.getDetailClinicById(req.query.id);
-    return res.status(200).json(infor);
+    let response = await clinicService.getDetailClinicById(req.query.id);
+    return res.status(200).json(response);
   } catch (e) {
     console.log(e);
     return res.status(200).json({
@@ -40,8 +55,16 @@ let getDetailClinicById = async (req, res) => {
 };
 
 let handleEditClinic = async (req, res) => {
-  let message = await clinicService.updateClinicData(req.body);
-  return res.status(200).json(message);
+  try {
+    let response = await clinicService.updateClinicData(req.body);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
 };
 let handleDeleteClinic = async (req, res) => {
   if (!req.body.id) {
@@ -50,8 +73,8 @@ let handleDeleteClinic = async (req, res) => {
       errMessage: 'Missing required parameters !!!',
     });
   }
-  let message = await clinicService.deleteClinic(req.body.id);
-  return res.status(200).json(message);
+  let response = await clinicService.deleteClinic(req.body.id);
+  return res.status(200).json(response);
 };
 
 module.exports = {
@@ -60,4 +83,5 @@ module.exports = {
   getDetailClinicById: getDetailClinicById,
   handleEditClinic: handleEditClinic,
   handleDeleteClinic: handleDeleteClinic,
+  getTopClinic: getTopClinic,
 };

@@ -17,6 +17,7 @@ let createNewClinic = (data) => {
         !data.name ||
         !data.address ||
         !data.imageBase64 ||
+        !data.specialtyId ||
         !data.descriptionHTML ||
         !data.descriptionMarkdown
       ) {
@@ -29,6 +30,7 @@ let createNewClinic = (data) => {
           name: data.name,
           address: data.address,
           image: data.imageBase64,
+          specialtyId: data.specialtyId,
           descriptionHTML: data.descriptionHTML,
           descriptionMarkdown: data.descriptionMarkdown,
         });
@@ -82,6 +84,25 @@ let getAllClinic = () => {
   });
 };
 
+let getTopClinic = (limit) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let clinic = await db.Clinic.findAll({
+        limit: limit,
+        raw: true,
+        nest: true,
+      });
+
+      resolve({
+        errCode: 0,
+        data: clinic,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let getDetailClinicById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -104,14 +125,23 @@ let getDetailClinicById = (inputId) => {
         });
 
         if (data) {
-          let doctorClinic = [];
-          doctorClinic = await db.Doctor_infor.findAll({
+          let specialtyClinic = [];
+          specialtyClinic = await db.Specialty.findAll({
             where: {
               clinicId: inputId,
             },
-            attributes: ['doctorId'],
+            attributes: ['id', 'name', 'image'],
+            raw: false,
+            nest: true,
           });
-          data.doctorClinic = doctorClinic;
+
+          specialtyClinic.map((item) => {
+            return (item.image = Buffer.from(item.image, 'base64').toString(
+              'binary'
+            ));
+          });
+
+          data.specialtyClinic = specialtyClinic;
         } else data = {};
 
         resolve({
@@ -142,6 +172,7 @@ let updateClinicData = (data) => {
       if (clinic) {
         clinic.name = data.name;
         clinic.address = data.address;
+        clinic.specialtyId = data.specialtyId;
         clinic.descriptionHTML = data.descriptionHTML;
         clinic.descriptionMarkdown = data.descriptionMarkdown;
         if (data.image) {
@@ -196,4 +227,5 @@ module.exports = {
   getDetailClinicById: getDetailClinicById,
   updateClinicData: updateClinicData,
   deleteClinic: deleteClinic,
+  getTopClinic: getTopClinic,
 };

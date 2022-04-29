@@ -2,6 +2,47 @@ const db = require('../models');
 
 require('dotenv').config();
 
+
+let getAllSpecialty = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.Specialty.findAll();
+      if (data && data.length > 0) {
+        data.map((item) => {
+          item.image = Buffer.from(item.image, 'base64').toString('binary');
+          return item;
+        });
+      }
+      resolve({
+        errCode: 0,
+        errMessage: 'OK',
+        data,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getTopSpecialty = (limit) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let specialty = await db.Specialty.findAll({
+        limit: limit,
+        raw: true,
+        nest: true,
+      });
+
+      resolve({
+        errCode: 0,
+        data: specialty,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let createNewSpecialty = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -59,26 +100,6 @@ let checkSpecialtyName = (specialtyName) => {
   });
 };
 
-let getAllSpecialty = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let data = await db.Specialty.findAll();
-      if (data && data.length > 0) {
-        data.map((item) => {
-          item.image = Buffer.from(item.image, 'base64').toString('binary');
-          return item;
-        });
-      }
-      resolve({
-        errCode: 0,
-        errMessage: 'OK',
-        data,
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 
 let getDetailSpecialtyById = (inputId, location) => {
   return new Promise(async (resolve, reject) => {
@@ -93,7 +114,7 @@ let getDetailSpecialtyById = (inputId, location) => {
           where: {
             id: inputId,
           },
-          attributes: ['descriptionHTML', 'descriptionMarkdown'],
+          attributes: ['name', 'descriptionHTML', 'descriptionMarkdown'],
         });
         if (data) {
           let doctorSpecialty = [];
@@ -198,4 +219,5 @@ module.exports = {
   getDetailSpecialtyById: getDetailSpecialtyById,
   deleteSpecialty: deleteSpecialty,
   updateSpecialtyData: updateSpecialtyData,
+  getTopSpecialty: getTopSpecialty
 };

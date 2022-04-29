@@ -47,7 +47,7 @@ let handleUserLogin = (email, password) => {
             userData.user = user;
           } else {
             userData.errCode = 3;
-            userData.errMessage = 'Wrong not password';
+            userData.errMessage = `Your's password inn't exist in your system. Please try other password !!!`;
           }
         } else {
           userData.errCode = 2;
