@@ -140,7 +140,6 @@ let getDetailClinicById = (inputId) => {
               'binary'
             ));
           });
-
           data.specialtyClinic = specialtyClinic;
         } else data = {};
 
