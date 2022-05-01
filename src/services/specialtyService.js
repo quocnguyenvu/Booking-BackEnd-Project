@@ -57,6 +57,7 @@ let createNewSpecialty = (data) => {
       if (
         !data.name ||
         !data.imageBase64 ||
+        !data.clinicId ||
         !data.descriptionHTML ||
         !data.descriptionMarkdown
       ) {
@@ -68,6 +69,7 @@ let createNewSpecialty = (data) => {
         await db.Specialty.create({
           name: data.name,
           image: data.imageBase64,
+          clinicId: data.clinicId,
           descriptionHTML: data.descriptionHTML,
           descriptionMarkdown: data.descriptionMarkdown,
         });

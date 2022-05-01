@@ -262,7 +262,7 @@ let bulkCreateSchedule = (data) => {
             return item;
           });
         }
-        // get all existing data    
+        // get all existing data
         let existing = await db.Schedule.findAll({
           where: { doctorId: data.doctorId, date: '' + data.formatedDate },
           attributes: ['date', 'timeType', 'doctorId', 'maxNumber'],
@@ -651,6 +651,35 @@ let sendBlockedNotification = (data) => {
   });
 };
 
+let getAllPatientForDoctor = (doctorId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!doctorId) {
+        resolve({
+          errCode: 1,
+          errMessage: 'Missing required parameter !',
+        });
+      } else {
+        let data = await db.History.findAll({
+            where: {
+              doctorId: doctorId,
+            },
+            raw: false,
+            nest: true,
+        });
+        // if(!data) data = {};
+
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
@@ -664,4 +693,5 @@ module.exports = {
   sendRemedy: sendRemedy,
   sendOnlineClinic: sendOnlineClinic,
   sendBlockedNotification: sendBlockedNotification,
+  getAllPatientForDoctor: getAllPatientForDoctor,
 };

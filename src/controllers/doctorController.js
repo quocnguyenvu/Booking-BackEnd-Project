@@ -164,6 +164,19 @@ let sendBlockedNotification = async (req, res) => {
   }
 };
 
+let getAllPatientForDoctor = async (req, res) => {
+  try {
+    let infor = await doctorService.getAllPatientForDoctor(req.query.doctorId);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
+};
+
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
   getAllDoctors: getAllDoctors,
@@ -177,4 +190,5 @@ module.exports = {
   sendRemedy: sendRemedy,
   sendOnlineClinic: sendOnlineClinic,
   sendBlockedNotification: sendBlockedNotification,
+  getAllPatientForDoctor: getAllPatientForDoctor,
 };

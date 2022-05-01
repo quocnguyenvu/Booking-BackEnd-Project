@@ -28,11 +28,10 @@ let initWebRoutes = (app) => {
   router.delete('/api/delete-user', userContrller.handleDeleteUser);
 
   // ---------------- doctorController ----------------
-  // router.get('/api/search-doctor', doctorController.getSearchDoctor);
   router.get('/api/top-doctor-home', doctorController.getTopDoctorHome);
   router.get('/api/get-all-doctors', doctorController.getAllDoctors);
   router.get(
-    '/api/get/detail-doctor-by-id',
+    '/api/get-detail-doctor-by-id',
     doctorController.getDetailDoctorById
   );
   router.post('/api/create-schedule', doctorController.bulkCreateSchedule);
@@ -59,6 +58,7 @@ let initWebRoutes = (app) => {
     '/api/send-blocked-notification',
     doctorController.sendBlockedNotification
   );
+  router.get('/api/get-medical-record-for-doctor', doctorController.getAllPatientForDoctor);
 
   // ---------------- patientController ----------------
   router.get('/api/get-all-patient', patientController.getAllPatient);
