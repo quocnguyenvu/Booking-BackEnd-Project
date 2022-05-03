@@ -661,11 +661,24 @@ let getAllPatientForDoctor = (doctorId) => {
         });
       } else {
         let data = await db.History.findAll({
-            where: {
-              doctorId: doctorId,
+          where: {
+            doctorId: doctorId,
+          },
+          include: [
+            {
+              model: db.Patient,
+              as: 'patientInfor',
+              attributes: [
+                'email',
+                'fullName',
+                'phoneNumber',
+                'address',
+                'gender',
+              ],
             },
-            raw: false,
-            nest: true,
+          ],
+          raw: false,
+          nest: true,
         });
         // if(!data) data = {};
 

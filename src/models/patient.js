@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'patientId',
         as: 'patientIdData',
       });
+
+      // 1 patient n booking
+      Patient.hasMany(models.History, {
+        foreignKey: 'patientId',
+        as: 'patientInfor',
+      });
     }
   }
   Patient.init(

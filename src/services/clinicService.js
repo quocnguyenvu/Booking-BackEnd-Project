@@ -6,18 +6,18 @@ let createNewClinic = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let checkName = await checkClinicName(data.name);
-      if (checkName === true) {
+      let checkAddress = await checkClinicAddress(data.address);
+      if (checkName && checkAddress) {
         resolve({
           errCode: 1,
           errMessage:
-            'Your name is already in used, Please try another name!!!',
+            'Your name and address is already in used, Please try another name and address!!!',
         });
       }
       if (
         !data.name ||
         !data.address ||
         !data.imageBase64 ||
-        !data.specialtyId ||
         !data.descriptionHTML ||
         !data.descriptionMarkdown
       ) {
@@ -30,7 +30,6 @@ let createNewClinic = (data) => {
           name: data.name,
           address: data.address,
           image: data.imageBase64,
-          specialtyId: data.specialtyId,
           descriptionHTML: data.descriptionHTML,
           descriptionMarkdown: data.descriptionMarkdown,
         });
@@ -53,6 +52,24 @@ let checkClinicName = (clinicName) => {
         where: { name: clinicName },
       });
       if (name) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+
+let checkClinicAddress = (clinicAddress) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let address = await db.Clinic.findOne({
+        where: { address: clinicAddress },
+      });
+      if (address) {
         resolve(true);
       } else {
         resolve(false);

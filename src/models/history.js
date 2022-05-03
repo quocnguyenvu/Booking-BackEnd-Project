@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      History.belongsTo(models.Patient, {
+        foreignKey: 'patientId',
+        targetKey: 'id',
+        as: 'patientInfor',
+      });
     }
   }
   History.init(

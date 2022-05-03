@@ -58,7 +58,10 @@ let initWebRoutes = (app) => {
     '/api/send-blocked-notification',
     doctorController.sendBlockedNotification
   );
-  router.get('/api/get-medical-record-for-doctor', doctorController.getAllPatientForDoctor);
+  router.get(
+    '/api/get-medical-record-for-doctor',
+    doctorController.getAllPatientForDoctor
+  );
 
   // ---------------- patientController ----------------
   router.get('/api/get-all-patient', patientController.getAllPatient);
