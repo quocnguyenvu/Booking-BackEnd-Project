@@ -62,7 +62,6 @@ let checkClinicName = (clinicName) => {
   });
 };
 
-
 let checkClinicAddress = (clinicAddress) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -109,6 +108,12 @@ let getTopClinic = (limit) => {
         raw: true,
         nest: true,
       });
+      if (clinic && clinic.length > 0) {
+        clinic.map((item) => {
+          item.image = Buffer.from(item.image, 'base64').toString('binary');
+          return item;
+        });
+      }
 
       resolve({
         errCode: 0,

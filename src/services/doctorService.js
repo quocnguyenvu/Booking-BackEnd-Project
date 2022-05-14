@@ -692,6 +692,47 @@ let getAllPatientForDoctor = (doctorId) => {
     }
   });
 };
+let getPatientforDoctorById = (patientId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!patientId) {
+        resolve({
+          errCode: 1,
+          errMessage: 'Missing required parameter !',
+        });
+      } else {
+        let data = await db.History.findAll({
+          where: {
+            patientId: patientId,
+          },
+          include: [
+            {
+              model: db.Patient,
+              as: 'patientInfor',
+              attributes: [
+                'email',
+                'fullName',
+                'phoneNumber',
+                'address',
+                'gender',
+              ],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+        // if(!data) data = {};
+
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
 
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
@@ -707,4 +748,5 @@ module.exports = {
   sendOnlineClinic: sendOnlineClinic,
   sendBlockedNotification: sendBlockedNotification,
   getAllPatientForDoctor: getAllPatientForDoctor,
+  getPatientforDoctorById: getPatientforDoctorById,
 };

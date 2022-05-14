@@ -32,6 +32,12 @@ let getTopSpecialty = (limit) => {
         raw: true,
         nest: true,
       });
+      if (specialty && specialty.length > 0) {
+        specialty.map((item) => {
+          item.image = Buffer.from(item.image, 'base64').toString('binary');
+          return item;
+        });
+      }
 
       resolve({
         errCode: 0,
