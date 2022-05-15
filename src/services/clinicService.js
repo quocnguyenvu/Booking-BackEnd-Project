@@ -1,49 +1,5 @@
-const db = require('../models');
-
+import db from '../models/index';
 require('dotenv').config();
-
-let createNewClinic = (data) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let checkName = await checkClinicName(data.name);
-      let checkAddress = await checkClinicAddress(data.address);
-      if (checkName && checkAddress) {
-        resolve({
-          errCode: 1,
-          errMessage:
-            'Your name and address is already in used, Please try another name and address!!!',
-        });
-      }
-      if (
-        !data.name ||
-        !data.address ||
-        !data.imageBase64 ||
-        !data.descriptionHTML ||
-        !data.descriptionMarkdown
-      ) {
-        resolve({
-          errCode: 2,
-          errMessage: 'Missing required parameter !',
-        });
-      } else {
-        await db.Clinic.create({
-          name: data.name,
-          address: data.address,
-          image: data.imageBase64,
-          descriptionHTML: data.descriptionHTML,
-          descriptionMarkdown: data.descriptionMarkdown,
-        });
-
-        resolve({
-          errCode: 0,
-          errMessage: 'OK',
-        });
-      }
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
 
 let checkClinicName = (clinicName) => {
   return new Promise(async (resolve, reject) => {
@@ -169,6 +125,48 @@ let getDetailClinicById = (inputId) => {
           errCode: 0,
           errMessage: 'OK',
           data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let createNewClinic = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let checkName = await checkClinicName(data.name);
+      let checkAddress = await checkClinicAddress(data.address);
+      if (checkName === true && checkAddress === true) {
+        resolve({
+          errCode: 1,
+          errMessage:
+            'Your name and address is already in used, Please try another name and address!!!',
+        });
+      } else if (
+        !data.name ||
+        !data.address ||
+        !data.imageBase64 ||
+        !data.descriptionHTML ||
+        !data.descriptionMarkdown
+      ) {
+        resolve({
+          errCode: 2,
+          errMessage: 'Missing required parameter !',
+        });
+      } else {
+        await db.Clinic.create({
+          name: data.name,
+          address: data.address,
+          image: data.imageBase64,
+          descriptionHTML: data.descriptionHTML,
+          descriptionMarkdown: data.descriptionMarkdown,
+        });
+
+        resolve({
+          errCode: 0,
+          errMessage: 'OK',
         });
       }
     } catch (e) {

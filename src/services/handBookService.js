@@ -1,10 +1,10 @@
 import db from '../models/index';
 require('dotenv').config();
 
-let getAllSpecialty = () => {
+let getAllHandBook = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let data = await db.Specialty.findAll();
+      let data = await db.Hand_books.findAll();
       if (data && data.length > 0) {
         data.map((item) => {
           item.image = Buffer.from(item.image, 'base64').toString('binary');
@@ -22,16 +22,16 @@ let getAllSpecialty = () => {
   });
 };
 
-let getTopSpecialty = (limit) => {
+let getTopHandBook = (limit) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let specialty = await db.Specialty.findAll({
+      let data = await db.Hand_books.findAll({
         limit: limit,
         raw: true,
         nest: true,
       });
-      if (specialty && specialty.length > 0) {
-        specialty.map((item) => {
+      if (data && data.length > 0) {
+        data.map((item) => {
           item.image = Buffer.from(item.image, 'base64').toString('binary');
           return item;
         });
@@ -39,7 +39,7 @@ let getTopSpecialty = (limit) => {
 
       resolve({
         errCode: 0,
-        data: specialty,
+        data: data,
       });
     } catch (e) {
       reject(e);
@@ -47,10 +47,10 @@ let getTopSpecialty = (limit) => {
   });
 };
 
-let createNewSpecialty = (data) => {
+let createNewHandBook = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let check = await checkSpecialtyName(data.name);
+      let check = await checkHandBookName(data.name);
       if (check === true) {
         resolve({
           errCode: 1,
@@ -60,24 +60,20 @@ let createNewSpecialty = (data) => {
       }
       if (
         !data.name ||
-        !data.description ||
         !data.imageBase64 ||
         !data.descriptionHTML ||
-        !data.descriptionMarkdown ||
-        !data.clinicId
+        !data.descriptionMarkdown
       ) {
         resolve({
           errCode: 2,
           errMessage: 'Missing required parameter !',
         });
       } else {
-        await db.Specialty.create({
+        await db.Hand_books.create({
           name: data.name,
-          description: data.description,
           image: data.imageBase64,
           descriptionHTML: data.descriptionHTML,
           descriptionMarkdown: data.descriptionMarkdown,
-          clinicId: data.clinicId,
         });
 
         resolve({
@@ -91,11 +87,11 @@ let createNewSpecialty = (data) => {
   });
 };
 
-let checkSpecialtyName = (specialtyName) => {
+let checkHandBookName = (handBookName) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let name = await db.Specialty.findOne({
-        where: { name: specialtyName },
+      let name = await db.Hand_books.findOne({
+        where: { name: handBookName },
       });
       if (name) {
         resolve(true);
@@ -108,52 +104,37 @@ let checkSpecialtyName = (specialtyName) => {
   });
 };
 
-let getDetailSpecialtyById = (inputId, location) => {
+let getDetailHandBookById = (inputId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!inputId || !location) {
+      if (!inputId) {
         resolve({
           errCode: 1,
           errMessage: 'Missing required parameter !',
         });
       } else {
-        let data = await db.Specialty.findOne({
+        let data = await db.Hand_books.findOne({
           where: {
             id: inputId,
           },
           attributes: [
             'name',
-            'description',
+            'image',
             'descriptionHTML',
             'descriptionMarkdown',
           ],
         });
-        if (data) {
-          let doctorSpecialty = [];
-          if (location === 'ALL') {
-            doctorSpecialty = await db.Doctor_infor.findAll({
-              where: {
-                specialtyId: inputId,
-              },
-              attributes: ['doctorId', 'provinceId'],
-            });
-          } else {
-            // find by location
-            doctorSpecialty = await db.Doctor_infor.findAll({
-              where: {
-                specialtyId: inputId,
-                provinceId: location,
-              },
-              attributes: ['doctorId', 'provinceId'],
-            });
-          }
-          data.doctorSpecialty = doctorSpecialty;
-        } else data = {};
+        if (data && data.length > 0) {
+          data.map((item) => {
+            item.image = Buffer.from(item.image, 'base64').toString('binary');
+            return item;
+          });
+        }
 
         resolve({
           errCode: 0,
           errMessage: 'OK',
-          data,
+          data: data,
         });
       }
     } catch (e) {
@@ -162,7 +143,7 @@ let getDetailSpecialtyById = (inputId, location) => {
   });
 };
 
-let updateSpecialtyData = (data) => {
+let updateHandBookData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.id) {
@@ -171,27 +152,26 @@ let updateSpecialtyData = (data) => {
           errMessage: 'Missing required parameters',
         });
       }
-      let specialty = await db.Specialty.findOne({
+      let handBook = await db.Hand_books.findOne({
         where: { id: data.id },
         raw: false,
       });
-      if (specialty) {
-        specialty.name = data.name;
-        specialty.description = data.description;
-        specialty.descriptionHTML = data.descriptionHTML;
-        specialty.descriptionMarkdown = data.descriptionMarkdown;
+      if (handBook) {
+        handBook.name = data.name;
+        handBook.descriptionHTML = data.descriptionHTML;
+        handBook.descriptionMarkdown = data.descriptionMarkdown;
         if (data.image) {
-          specialty.image = data.image;
+          handBook.image = data.image;
         }
-        await specialty.save();
+        await handBook.save();
         resolve({
           errCode: 0,
-          message: 'Update the specialty success !',
+          message: 'Update the hand book success !',
         });
       } else {
         resolve({
           errCode: 1,
-          errMessage: `Specialty's mot found !`,
+          errMessage: `Hand book's not found !`,
         });
       }
     } catch (e) {
@@ -200,37 +180,41 @@ let updateSpecialtyData = (data) => {
   });
 };
 
-let deleteSpecialty = (specialtyId) => {
+let deleteHandBook = (handBookId) => {
   return new Promise(async (resolve, reject) => {
-    let specialty = await db.Specialty.findOne({
-      where: {
-        id: specialtyId,
-      },
-    });
-    if (!specialty) {
-      resolve({
-        errCode: 2,
-        message: `The specialty isn't exits`,
+    try {
+      let data = await db.Hand_books.findOne({
+        where: {
+          id: handBookId,
+        },
       });
-    }
-    await db.Specialty.destroy({
-      where: {
-        id: specialtyId,
-      },
-    });
+      if (!data) {
+        resolve({
+          errCode: 2,
+          message: `The hand book isn't exits`,
+        });
+      }
+      await db.Hand_books.destroy({
+        where: {
+          id: handBookId,
+        },
+      });
 
-    resolve({
-      errCode: 0,
-      message: `The specialty is delete`,
-    });
+      resolve({
+        errCode: 0,
+        message: `The hand book is delete`,
+      });
+    } catch (e) {
+      reject(e);
+    }
   });
 };
 
 module.exports = {
-  createNewSpecialty: createNewSpecialty,
-  getAllSpecialty: getAllSpecialty,
-  getDetailSpecialtyById: getDetailSpecialtyById,
-  deleteSpecialty: deleteSpecialty,
-  updateSpecialtyData: updateSpecialtyData,
-  getTopSpecialty: getTopSpecialty,
+  getAllHandBook: getAllHandBook,
+  getTopHandBook: getTopHandBook,
+  getDetailHandBookById: getDetailHandBookById,
+  createNewHandBook: createNewHandBook,
+  updateHandBookData: updateHandBookData,
+  deleteHandBook: deleteHandBook,
 };

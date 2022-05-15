@@ -1,8 +1,8 @@
-import specialtyService from '../services/specialtyService';
+import handBookService from '../services/handBookService';
 
-let getAllSpecialty = async (req, res) => {
+let getAllHandBook = async (req, res) => {
   try {
-    let response = await specialtyService.getAllSpecialty();
+    let response = await handBookService.getAllHandBook();
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -13,11 +13,11 @@ let getAllSpecialty = async (req, res) => {
   }
 };
 
-let getTopSpecialty = async (req, res) => {
+let getTopHandBook = async (req, res) => {
   let limit = req.query.limit;
-  if (!limit) limit = 4;
+  if (!limit) limit = 2;
   try {
-    let response = await specialtyService.getTopSpecialty(+limit);
+    let response = await handBookService.getTopHandBook(+limit);
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -28,9 +28,9 @@ let getTopSpecialty = async (req, res) => {
   }
 };
 
-let createNewSpecialty = async (req, res) => {
+let createNewHandBook = async (req, res) => {
   try {
-    let response = await specialtyService.createNewSpecialty(req.body);
+    let response = await handBookService.createNewHandBook(req.body);
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -41,12 +41,9 @@ let createNewSpecialty = async (req, res) => {
   }
 };
 
-let getDetailSpecialtyById = async (req, res) => {
+let getDetailHandBookById = async (req, res) => {
   try {
-    let response = await specialtyService.getDetailSpecialtyById(
-      req.query.id,
-      req.query.location
-    );
+    let response = await handBookService.getDetailHandBookById(req.query.id);
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -57,9 +54,9 @@ let getDetailSpecialtyById = async (req, res) => {
   }
 };
 
-let handleEditSpecialty = async (req, res) => {
+let handleEditHandBook = async (req, res) => {
   try {
-    let response = await specialtyService.updateSpecialtyData(req.body);
+    let response = await handBookService.updateHandBookData(req.body);
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
@@ -70,7 +67,7 @@ let handleEditSpecialty = async (req, res) => {
   }
 };
 
-let handleDeleteSpecialty = async (req, res) => {
+let handleDeleteHandBook = async (req, res) => {
   try {
     if (!req.body.id) {
       return res.status(200).json({
@@ -78,8 +75,8 @@ let handleDeleteSpecialty = async (req, res) => {
         errMessage: 'Missing required parameters !!!',
       });
     }
-    let message = await specialtyService.deleteSpecialty(req.body.id);
-    return res.status(200).json(message);
+    let response = await handBookService.deleteHandBook(req.body.id);
+    return res.status(200).json(response);
   } catch (e) {
     console.log(e);
     return res.status(200).json({
@@ -90,10 +87,10 @@ let handleDeleteSpecialty = async (req, res) => {
 };
 
 module.exports = {
-  createNewSpecialty: createNewSpecialty,
-  getAllSpecialty: getAllSpecialty,
-  getDetailSpecialtyById: getDetailSpecialtyById,
-  handleDeleteSpecialty: handleDeleteSpecialty,
-  handleEditSpecialty: handleEditSpecialty,
-  getTopSpecialty: getTopSpecialty,
+  createNewHandBook: createNewHandBook,
+  getAllHandBook: getAllHandBook,
+  getDetailHandBookById: getDetailHandBookById,
+  handleDeleteHandBook: handleDeleteHandBook,
+  handleEditHandBook: handleEditHandBook,
+  getTopHandBook: getTopHandBook,
 };

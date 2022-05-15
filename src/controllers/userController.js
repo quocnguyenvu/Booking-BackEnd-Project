@@ -1,63 +1,103 @@
 import userService from '../services/userService';
 
 let handleLogin = async (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
+  try {
+    let email = req.body.email;
+    let password = req.body.password;
 
-  if (!email || !password) {
-    return res.status(500).json({
-      errCode: 1,
-      message: 'Missing inputs parameter!!!',
+    if (!email || !password) {
+      return res.status(500).json({
+        errCode: 1,
+        message: 'Missing inputs parameter!!!',
+      });
+    }
+
+    let userData = await userService.handleUserLogin(email, password);
+    return res.status(200).json({
+      errCode: userData.errCode,
+      message: userData.errMessage,
+      user: userData ? userData.user : {},
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
     });
   }
-
-  let userData = await userService.handleUserLogin(email, password);
-  return res.status(200).json({
-    errCode: userData.errCode,
-    message: userData.errMessage,
-    user: userData ? userData.user : {},
-  });
 };
 
 let handleGetAllUsers = async (req, res) => {
-  let id = req.query.id; //All id
-  if (!id) {
+  try {
+    let id = req.query.id; //All id
+    if (!id) {
+      return res.status(200).json({
+        errCode: 0,
+        errMessage: 'Missing required parameter !!!',
+        users: [],
+      });
+    }
+
+    let users = await userService.getAllUsers(id);
     return res.status(200).json({
       errCode: 0,
-      errMessage: 'Missing required parameter !!!',
-      users: [],
+      errMessage: 'OK',
+      users,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
     });
   }
-
-  let users = await userService.getAllUsers(id);
-  return res.status(200).json({
-    errCode: 0,
-    errMessage: 'OK',
-    users,
-  });
 };
 
 let handleCreateNewUser = async (req, res) => {
-  let message = await userService.createNewUser(req.body);
-  return res.status(200).json(message);
+  try {
+    let message = await userService.createNewUser(req.body);
+    return res.status(200).json(message);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
 };
 
 let handleEditUser = async (req, res) => {
-  let data = req.body;
-  let message = await userService.updateUserData(data);
+  try {
+    let data = req.body;
+    let message = await userService.updateUserData(data);
 
-  return res.status(200).json(message);
+    return res.status(200).json(message);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
 };
 
 let handleDeleteUser = async (req, res) => {
-  if (!req.body.id) {
+  try {
+    if (!req.body.id) {
+      return res.status(200).json({
+        errCode: 1,
+        errMessage: 'Missing required parameters !!!',
+      });
+    }
+    let message = await userService.deleteUser(req.body.id);
+    return res.status(200).json(message);
+  } catch (e) {
+    console.log(e);
     return res.status(200).json({
-      errCode: 1,
-      errMessage: 'Missing required parameters !!!',
+      errCode: -1,
+      errMessage: 'Error from the server !',
     });
   }
-  let message = await userService.deleteUser(req.body.id);
-  return res.status(200).json(message);
 };
 
 let getAllCode = async (req, res) => {

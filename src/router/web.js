@@ -1,10 +1,11 @@
 import express from 'express';
-import homeController from '../controllers/homeController';
 import userContrller from '../controllers/userController';
+import homeController from '../controllers/homeController';
 import doctorController from '../controllers/doctorController';
-import patientController from '../controllers/patientController';
-import specialtyController from '../controllers/specialtyController';
 import clinicController from '../controllers/clinicController';
+import patientController from '../controllers/patientController';
+import handBookController from '../controllers/handBookController';
+import specialtyController from '../controllers/specialtyController';
 
 let router = express.Router();
 
@@ -63,7 +64,10 @@ let initWebRoutes = (app) => {
     doctorController.getAllPatientForDoctor
   );
 
-  router.get('/api/get-patient-for-doctor-by-id', doctorController.getPatientforDoctorById)
+  router.get(
+    '/api/get-patient-for-doctor-by-id',
+    doctorController.getPatientforDoctorById
+  );
 
   // ---------------- patientController ----------------
   router.get('/api/get-all-patient', patientController.getAllPatient);
@@ -104,6 +108,23 @@ let initWebRoutes = (app) => {
   router.post('/api/create-new-clinic', clinicController.createNewClinic);
   router.delete('/api/delete-clinic', clinicController.handleDeleteClinic);
   router.put('/api/edit-clinic', clinicController.handleEditClinic);
+
+  // ---------------- handBookController ----------------
+  router.get('/api/get-all-hand-book', handBookController.getAllHandBook);
+  router.get('/api/get-top-hand-book', handBookController.getTopHandBook);
+  router.get(
+    '/api/get-detail-hand-book-by-id',
+    handBookController.getDetailHandBookById
+  );
+  router.post(
+    '/api/create-new-hand-book',
+    handBookController.createNewHandBook
+  );
+  router.put('/api/edit-hand-book', handBookController.handleEditHandBook);
+  router.delete(
+    '/api/delete-hand-book',
+    handBookController.handleDeleteHandBook
+  );
 
   return app.use('/', router);
 };
