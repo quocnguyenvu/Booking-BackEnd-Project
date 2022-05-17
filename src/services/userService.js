@@ -29,12 +29,17 @@ let handleUserLogin = (email, password) => {
             'password',
             'firstName',
             'lastName',
+            'image',
           ],
           where: {
             email: email,
           },
           raw: true,
         });
+
+        if (user && user.image) {
+          user.image = Buffer.from(user.image, 'base64').toString('binary');
+        }
 
         if (user) {
           //compare password
