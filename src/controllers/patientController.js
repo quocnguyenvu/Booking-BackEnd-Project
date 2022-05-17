@@ -52,8 +52,8 @@ let patientPayment = async (req, res) => {
   }
 };
 
-let getAllPatientPayment = async (req, res) =>  {
-try {
+let getAllPatientPayment = async (req, res) => {
+  try {
     let data = await patientService.getAllPatientPayment();
     return res.status(200).json(data);
   } catch (e) {
@@ -63,7 +63,20 @@ try {
       errMessage: 'Error from the server !',
     });
   }
-}
+};
+
+let postPaymentPatient = async (req, res) => {
+  try {
+    let infor = await patientService.postPaymentPatient(req.body);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
+};
 
 module.exports = {
   patientPayment: patientPayment,
@@ -71,4 +84,5 @@ module.exports = {
   postBookAppointment: postBookAppointment,
   getAllPatientPayment: getAllPatientPayment,
   postVerifyBookAppointment: postVerifyBookAppointment,
+  postPaymentPatient: postPaymentPatient,
 };

@@ -14,9 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   Payment.init(
     {
       paymentId: DataTypes.STRING,
+      patientId: DataTypes.INTEGER,
       email: DataTypes.STRING,
       email_address: DataTypes.STRING,
-      name: DataTypes.STRING,
+      fullName: DataTypes.STRING,
       address: DataTypes.STRING,
       value: DataTypes.STRING,
       currency_code: DataTypes.STRING,

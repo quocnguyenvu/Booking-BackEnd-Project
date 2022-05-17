@@ -128,35 +128,6 @@ let sendAttachment = async (dataSend) => {
   });
 };
 
-let getBodyHTMLEmailOnlineClinic = (dataSend) => {
-  let result = '';
-  if (dataSend.language === 'vi') {
-    result = `
-                <h3>Xin chào ${dataSend.fullName} !</h3>
-                <h4>Số điện thoại: ${dataSend.phoneNumber} </h4>
-                <h4>Địa chỉ: ${dataSend.address} </h4>
-                <h4>Dưới đây là liên kết vào phòng khám trực tuyến</h4>
-                <div>
-                    <a href=${dataSend.linkRoom} target="_blank">Click here</a>
-                </div>
-                <div>Thanks !</div>
-            `;
-  }
-  if (dataSend.language === 'en') {
-    result = `
-                <h3>Dear ${dataSend.fullName} !</h3>
-                <h4>Phone number: ${dataSend.phoneNumber} </h4>
-                <h4>Address: ${dataSend.address} </h4>
-                <h4>Here is the link to the online clinic</h4>
-                <div>
-                    <a href=${dataSend.linkRoom} target="_blank">Click here</a>
-                </div>
-                <div>Thanks !</div>
-            `;
-  }
-
-  return result;
-};
 
 let sendLink = async (dataSend) => {
   return new Promise(async (resolve, reject) => {
@@ -187,14 +158,18 @@ let sendLink = async (dataSend) => {
   });
 };
 
-let getBodyHTMLEmailBlocked = (dataSend) => {
+
+let getBodyHTMLEmailOnlineClinic = (dataSend) => {
   let result = '';
   if (dataSend.language === 'vi') {
     result = `
                 <h3>Xin chào ${dataSend.fullName} !</h3>
                 <h4>Số điện thoại: ${dataSend.phoneNumber} </h4>
                 <h4>Địa chỉ: ${dataSend.address} </h4>
-                <h4>Bạn đã bị đưa vào danh sách đen vì đã đặt lịch hẹn mà không gặp bác sĩ</h4>
+                <h4>Dưới đây là liên kết vào phòng khám trực tuyến</h4>
+                <div>
+                    <a href=${dataSend.linkRoom} target="_blank">Click here</a>
+                </div>
                 <div>Thanks !</div>
             `;
   }
@@ -203,13 +178,17 @@ let getBodyHTMLEmailBlocked = (dataSend) => {
                 <h3>Dear ${dataSend.fullName} !</h3>
                 <h4>Phone number: ${dataSend.phoneNumber} </h4>
                 <h4>Address: ${dataSend.address} </h4>
-                <h4>HereYou have been blacklisted for making an appointment without seeing a doctor</h4>
+                <h4>Here is the link to the online clinic</h4>
+                <div>
+                    <a href=${dataSend.linkRoom} target="_blank">Click here</a>
+                </div>
                 <div>Thanks !</div>
             `;
   }
 
   return result;
 };
+
 
 let sendNotificationBlocked = async (dataSend) => {
   return new Promise(async (resolve, reject) => {
@@ -240,9 +219,103 @@ let sendNotificationBlocked = async (dataSend) => {
   });
 };
 
+
+let getBodyHTMLEmailBlocked = (dataSend) => {
+  let result = '';
+  if (dataSend.language === 'vi') {
+    result = `
+                <h3>Xin chào ${dataSend.fullName} !</h3>
+                <h4>Số điện thoại: ${dataSend.phoneNumber} </h4>
+                <h4>Địa chỉ: ${dataSend.address} </h4>
+                <h4>Bạn đã bị đưa vào danh sách đen vì đã đặt lịch hẹn mà không gặp bác sĩ</h4>
+                <div>Thanks !</div>
+            `;
+  }
+  if (dataSend.language === 'en') {
+    result = `
+                <h3>Dear ${dataSend.fullName} !</h3>
+                <h4>Phone number: ${dataSend.phoneNumber} </h4>
+                <h4>Address: ${dataSend.address} </h4>
+                <h4>HereYou have been blacklisted for making an appointment without seeing a doctor</h4>
+                <div>Thanks !</div>
+            `;
+  }
+
+  return result;
+};
+
+
+
+
+
+
+let sendPaymentPatient = async (dataSend) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_APP, // generated ethereal user
+          pass: process.env.EMAIL_APP_PASSWORD, // generated ethereal password
+        },
+      });
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        to: dataSend.email, // list of receivers
+        subject: 'Payment success ✔', // Subject line
+        html: getBodyHTMLPayment(dataSend),
+      });
+
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getBodyHTMLPayment = (dataSend) => {
+  let result = '';
+  if (dataSend.language === 'vi') {
+    result = `
+                <h3>Xin chào ${dataSend.fullName} !</h3>
+                <p>Bạn nhận được email vì đã đặt lịch trên hệ thống đặt lịch khám bệnh</p>
+                <p>Thông tin đặt lịch khám bệnh:</p>
+                <div><b>Thời gian: ${dataSend.time}</b></div>
+                <div><b>Bác sĩ: ${dataSend.doctorName}</b></div>
+                <div><b>Tổng tiền: ${dataSend.value} ${dataSend.currency_code}</b></div>
+                <div><b>Mã giao dịch: ${dataSend.paymentId}</b></div>
+                <p>Bạn đã hoàn tất thủ tục đặt lịch khám bệnh.</p>
+                <div>Thanks !</div>
+            `;
+  }
+  if (dataSend.language === 'en') {
+    result = `
+                <h3>Dear ${dataSend.fullName} !</h3>
+                <p>You received the email because it was set up on the appointment booking system.</p>
+                <p>Information to schedule an appointment:</p>
+                <div><b>Time: ${dataSend.time}</b></div>
+                <div><b>Doctor: ${dataSend.doctorName}</b></div>
+                <div><b>Total money: ${dataSend.value} ${dataSend.currency_code}</b></div>
+                <div><b>Trading code: ${dataSend.paymentId}</b></div>
+                <p>You have completed the procedure to book a medical appointment.</p>
+                <div>Thanks !</div>
+            `;
+  }
+
+  return result;
+};
+
+
+
 module.exports = {
   sendSimpleEmail: sendSimpleEmail,
   sendAttachment: sendAttachment,
   sendLink: sendLink,
   sendNotificationBlocked: sendNotificationBlocked,
+  sendPaymentPatient: sendPaymentPatient,
 };

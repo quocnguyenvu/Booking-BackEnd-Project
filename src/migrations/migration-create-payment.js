@@ -11,13 +11,16 @@ module.exports = {
       paymentId: {
         type: Sequelize.STRING,
       },
+      patientId: {
+        type: Sequelize.INTEGER,
+      },
       email: {
         type: Sequelize.STRING,
       },
       email_address: {
         type: Sequelize.STRING,
       },
-      name: {
+      fullName: {
         type: Sequelize.STRING,
       },
       address: {

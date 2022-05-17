@@ -140,7 +140,7 @@ let patientPayment = (data) => {
           errMessage: 'PaymentId is duplicatedd!!!',
         });
       } else if (
-        !data.name ||
+        !data.fullName ||
         !data.email ||
         !data.value ||
         !data.address ||
@@ -156,7 +156,7 @@ let patientPayment = (data) => {
         });
       } else {
         await db.Payment.create({
-          name: data.name,
+          fullName: data.fullName,
           email: data.email,
           value: data.value,
           address: data.address,
@@ -209,10 +209,101 @@ let getAllPatientPayment = () => {
   });
 };
 
+let postPaymentPatient = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (
+        !data.email ||
+        !data.doctorId ||
+        !data.date ||
+        !data.timeType ||
+        !data.fullName ||
+        !data.selectedGenders ||
+        !data.address ||
+        !data.phoneNumber ||
+        !data.paymentId ||
+        !data.email_address ||
+        !data.value ||
+        !data.currency_code
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: 'Missing required parameter !',
+        });
+      } else {
+        await emailService.sendPaymentPatient({
+          paymentId: data.paymentId,
+          email: data.email,
+          fullName: data.fullName,
+          value: data.value,
+          currency_code: data.currency_code,
+          doctorName: data.doctorName,
+          time: data.timeString,
+          language: data.language,
+        });
+
+        // insert patient
+        let user = await db.Patient.findOrCreate({
+          where: { email: data.email },
+          defaults: {
+            email: data.email,
+            roleId: 'R3',
+            fullName: data.fullName,
+            phoneNumber: data.phoneNumber,
+            address: data.address,
+            gender: data.selectedGenders,
+          },
+        });
+
+        // insert payment
+        let payment = await db.Payment.findOrCreate({
+          where: { paymentId: data.paymentId },
+          defaults: {
+            paymentId: data.paymentId,
+            patientId: user[0].id,
+            email: data.email,
+            email_address: data.email_address,
+            fullName: data.fullName,
+            address: data.address,
+            value: data.value,
+            currency_code: data.currency_code,
+            doctorId: data.doctorId,
+            timeType: data.timeType,
+          },
+        });
+
+        // create a booking
+        if (user && user[0]) {
+          await db.Booking.findOrCreate({
+            where: {
+              patientId: user[0].id,
+            },
+            defaults: {
+              statusId: 'S2',
+              doctorId: data.doctorId,
+              patientId: user[0].id,
+              date: data.date,
+              timeType: data.timeType,
+            },
+          });
+        }
+
+        resolve({
+          errCode: 0,
+          errMessage: 'Save infor patient success !',
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   patientPayment: patientPayment,
   getAllPatient: getAllPatient,
   postBookAppointment: postBookAppointment,
   getAllPatientPayment: getAllPatientPayment,
   postVerifyBookAppointment: postVerifyBookAppointment,
+  postPaymentPatient: postPaymentPatient,
 };
