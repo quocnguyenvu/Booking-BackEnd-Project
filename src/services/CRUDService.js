@@ -23,10 +23,6 @@ let createNewUser = async (data) => {
       reject(e);
     }
   });
-
-  // console.log('data from service');
-  // console.log(data);
-  // console.log(hashPasswordFromBcrypt);
 };
 
 let hashUserPassword = (password) => {

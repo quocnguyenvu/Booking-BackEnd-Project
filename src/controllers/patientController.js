@@ -39,8 +39,36 @@ let postVerifyBookAppointment = async (req, res) => {
   }
 };
 
+let patientPayment = async (req, res) => {
+  try {
+    let infor = await patientService.patientPayment(req.body);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
+};
+
+let getAllPatientPayment = async (req, res) =>  {
+try {
+    let data = await patientService.getAllPatientPayment();
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: 'Error from the server !',
+    });
+  }
+}
+
 module.exports = {
+  patientPayment: patientPayment,
   getAllPatient: getAllPatient,
   postBookAppointment: postBookAppointment,
+  getAllPatientPayment: getAllPatientPayment,
   postVerifyBookAppointment: postVerifyBookAppointment,
 };

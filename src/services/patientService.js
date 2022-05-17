@@ -11,10 +11,7 @@ let buildUrlEmail = (doctorId, token) => {
 let getAllPatient = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let patients = await db.Patient.findAll({
-        where: { roleId: 'R3' },
-      });
-
+      let patients = await db.Patient.findAll();
       resolve({
         errCode: 0,
         data: patients,
@@ -133,8 +130,89 @@ let postVerifyBookAppointment = (data) => {
   });
 };
 
+let patientPayment = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let check = await checkPaymentId(data.paymentId);
+      if (check === true) {
+        resolve({
+          errCode: 1,
+          errMessage: 'PaymentId is duplicatedd!!!',
+        });
+      } else if (
+        !data.name ||
+        !data.email ||
+        !data.value ||
+        !data.address ||
+        !data.timeType ||
+        !data.paymentId ||
+        !data.email_address ||
+        !data.currency_code ||
+        !data.doctorId
+      ) {
+        resolve({
+          errCode: 1,
+          errMessage: 'Missing required parameter !',
+        });
+      } else {
+        await db.Payment.create({
+          name: data.name,
+          email: data.email,
+          value: data.value,
+          address: data.address,
+          doctorId: data.doctorId,
+          timeType: data.timeType,
+          paymentId: data.paymentId,
+          email_address: data.email_address,
+          currency_code: data.currency_code,
+        });
+
+        resolve({
+          errCode: 0,
+          errMessage: 'Payment success!!!',
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let checkPaymentId = (paymentId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.Payment.findOne({
+        where: { paymentId: paymentId },
+      });
+      if (data) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllPatientPayment = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = await db.Payment.findAll();
+      resolve({
+        errCode: 0,
+        data: data,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
+  patientPayment: patientPayment,
   getAllPatient: getAllPatient,
   postBookAppointment: postBookAppointment,
+  getAllPatientPayment: getAllPatientPayment,
   postVerifyBookAppointment: postVerifyBookAppointment,
 };
