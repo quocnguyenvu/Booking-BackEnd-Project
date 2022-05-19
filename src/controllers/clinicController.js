@@ -6,7 +6,7 @@ let createNewClinic = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -19,7 +19,7 @@ let getAllClinic = async (req, res) => {
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -34,7 +34,7 @@ let getTopClinic = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -47,7 +47,7 @@ let getDetailClinicById = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -60,7 +60,7 @@ let handleEditClinic = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -70,7 +70,7 @@ let handleEditClinic = async (req, res) => {
 let handleDeleteClinic = async (req, res) => {
   try {
     if (!req.body.id) {
-      return res.status(200).json({
+      return res.status(204).json({
         errCode: 1,
         errMessage: 'Missing required parameters !!!',
       });
@@ -79,7 +79,7 @@ let handleDeleteClinic = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });

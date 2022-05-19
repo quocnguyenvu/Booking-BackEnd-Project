@@ -76,6 +76,7 @@ let postBookAppointment = (data) => {
               date: data.date,
               timeType: data.timeType,
               token: token,
+              statusPayment: 'Unpaid',
             },
           });
         }
@@ -254,9 +255,25 @@ let postPaymentPatient = (data) => {
             gender: data.selectedGenders,
           },
         });
+        // create a booking
+        if (user && user[0]) {
+          await db.Booking.findOrCreate({
+            where: {
+              patientId: user[0].id,
+            },
+            defaults: {
+              statusId: 'S2',
+              doctorId: data.doctorId,
+              patientId: user[0].id,
+              date: data.date,
+              timeType: data.timeType,
+              statusPayment: 'Paid'
+            },
+          });
+        }
 
         // insert payment
-        let payment = await db.Payment.findOrCreate({
+        await db.Payment.findOrCreate({
           where: { paymentId: data.paymentId },
           defaults: {
             paymentId: data.paymentId,
@@ -271,22 +288,6 @@ let postPaymentPatient = (data) => {
             timeType: data.timeType,
           },
         });
-
-        // create a booking
-        if (user && user[0]) {
-          await db.Booking.findOrCreate({
-            where: {
-              patientId: user[0].id,
-            },
-            defaults: {
-              statusId: 'S2',
-              doctorId: data.doctorId,
-              patientId: user[0].id,
-              date: data.date,
-              timeType: data.timeType,
-            },
-          });
-        }
 
         resolve({
           errCode: 0,

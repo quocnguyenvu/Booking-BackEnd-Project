@@ -5,6 +5,7 @@ let getAllSpecialty = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let data = await db.Specialty.findAll();
+
       if (data && data.length > 0) {
         data.map((item) => {
           item.image = Buffer.from(item.image, 'base64').toString('binary');
@@ -13,7 +14,7 @@ let getAllSpecialty = () => {
       }
       resolve({
         errCode: 0,
-        errMessage: 'OK',
+        errMessage: 'Get all specialty success !',
         data,
       });
     } catch (e) {
@@ -39,6 +40,7 @@ let getTopSpecialty = (limit) => {
 
       resolve({
         errCode: 0,
+        errMessage: 'Get limit specialty success !',
         data: specialty,
       });
     } catch (e) {
@@ -82,7 +84,7 @@ let createNewSpecialty = (data) => {
 
         resolve({
           errCode: 0,
-          errMessage: 'OK',
+          errMessage: 'Create new Specialty success !',
         });
       }
     } catch (e) {
@@ -152,7 +154,7 @@ let getDetailSpecialtyById = (inputId, location) => {
 
         resolve({
           errCode: 0,
-          errMessage: 'OK',
+          errMessage: 'Get detail specialty success !',
           data,
         });
       }
@@ -191,7 +193,7 @@ let updateSpecialtyData = (data) => {
       } else {
         resolve({
           errCode: 1,
-          errMessage: `Specialty's mot found !`,
+          errMessage: `Specialty's not found !`,
         });
       }
     } catch (e) {

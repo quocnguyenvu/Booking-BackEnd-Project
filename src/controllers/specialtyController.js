@@ -6,7 +6,7 @@ let getAllSpecialty = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -21,7 +21,7 @@ let getTopSpecialty = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -31,10 +31,10 @@ let getTopSpecialty = async (req, res) => {
 let createNewSpecialty = async (req, res) => {
   try {
     let response = await specialtyService.createNewSpecialty(req.body);
-    return res.status(200).json(response);
+    return res.status(201).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -50,7 +50,7 @@ let getDetailSpecialtyById = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -63,7 +63,7 @@ let handleEditSpecialty = async (req, res) => {
     return res.status(200).json(response);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -73,7 +73,7 @@ let handleEditSpecialty = async (req, res) => {
 let handleDeleteSpecialty = async (req, res) => {
   try {
     if (!req.body.id) {
-      return res.status(200).json({
+      return res.status(204).json({
         errCode: 1,
         errMessage: 'Missing required parameters !!!',
       });
@@ -82,7 +82,7 @@ let handleDeleteSpecialty = async (req, res) => {
     return res.status(200).json(message);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });

@@ -20,7 +20,7 @@ let handleLogin = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -46,7 +46,7 @@ let handleGetAllUsers = async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -59,7 +59,7 @@ let handleCreateNewUser = async (req, res) => {
     return res.status(200).json(message);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -74,7 +74,7 @@ let handleEditUser = async (req, res) => {
     return res.status(200).json(message);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
@@ -93,7 +93,7 @@ let handleDeleteUser = async (req, res) => {
     return res.status(200).json(message);
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       errCode: -1,
       errMessage: 'Error from the server !',
     });
