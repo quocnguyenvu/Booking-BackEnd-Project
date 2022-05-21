@@ -108,7 +108,7 @@ let getDetailClinicById = (inputId) => {
             where: {
               clinicId: inputId,
             },
-            attributes: ['id', 'name', 'image'],
+            attributes: ['id', 'name', 'image', 'description'],
             raw: false,
             nest: true,
           });

@@ -267,7 +267,7 @@ let postPaymentPatient = (data) => {
               patientId: user[0].id,
               date: data.date,
               timeType: data.timeType,
-              statusPayment: 'Paid'
+              statusPayment: 'Paid',
             },
           });
         }
