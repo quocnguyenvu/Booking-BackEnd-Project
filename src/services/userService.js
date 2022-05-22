@@ -162,13 +162,19 @@ let deleteUser = (userId) => {
         message: `The user isn't exits`,
       });
     }
-    await db.User.destroy({
+    let del = await db.User.destroy({
       where: {
         id: userId,
         roleId: 'R2',
       },
     });
-
+    if (del) {
+      await db.Doctor_infor.destroy({
+        where: {
+          doctorId: userId,
+        },
+      });
+    }
     resolve({
       errCode: 0,
       message: `The user is delete`,

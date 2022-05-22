@@ -100,6 +100,9 @@ let saveDetailInforDoctor = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let checkObject = checkRequiredFaild(data);
+      let check = await db.Doctor_infor.findOne({
+        where: { doctorId: data.doctorId },raw: false
+      });
 
       if (checkObject.isValid === false) {
         resolve({
@@ -108,7 +111,7 @@ let saveDetailInforDoctor = (data) => {
         });
       } else {
         // Insert to Markdown
-        if (data.action === 'CREATE') {
+        if (data.action === 'CREATE' && !check) {
           await db.Markdown.create({
             contentHTML: data.contentHTML,
             contentMarkdown: data.contentMarkdown,
@@ -139,28 +142,26 @@ let saveDetailInforDoctor = (data) => {
 
         if (doctorInfor) {
           // update
+          doctorInfor.note = data.note;
           doctorInfor.doctorId = data.doctorId;
           doctorInfor.priceId = data.selectedPrice;
+          doctorInfor.nameClinic = data.nameClinic;
+          doctorInfor.specialtyId = data.specialtyId;
           doctorInfor.paymentId = data.selectedPayment;
           doctorInfor.provinceId = data.selectedProvince;
           doctorInfor.addressClinic = data.addressClinic;
-          doctorInfor.nameClinic = data.nameClinic;
-          doctorInfor.note = data.note;
-          doctorInfor.specialtyId = data.specialtyId;
-         //  doctorInfor.clinicId = data.clinicId;
           await doctorInfor.save();
         } else {
           // create
           await db.Doctor_infor.create({
-            doctorId: data.doctorId,
-            priceId: data.selectedPrice,
-            paymentId: data.selectedPayment,
-            provinceId: data.selectedProvince,
-            addressClinic: data.addressClinic,
-            nameClinic: data.nameClinic,
             note: data.note,
+            doctorId: data.doctorId,
+            nameClinic: data.nameClinic,
+            priceId: data.selectedPrice,
             specialtyId: data.specialtyId,
-            // clinicId: data.clinicId,
+            paymentId: data.selectedPayment,
+            addressClinic: data.addressClinic,
+            provinceId: data.selectedProvince,
           });
         }
 
@@ -732,7 +733,7 @@ let getPatientforDoctorById = (patientId) => {
       reject(e);
     }
   });
-}
+};
 
 module.exports = {
   getTopDoctorHome: getTopDoctorHome,
