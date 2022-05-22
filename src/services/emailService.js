@@ -17,7 +17,7 @@ let sendSimpleEmail = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        from: '"Đường Đăng Đức 👻" <booking.kltn@gmail.com', // sender address
         to: dataSend.reciverEmail, // list of receivers
         subject: 'Thông tin đặt lịch khám bệnh ✔', // Subject line
         html: getBodyHTMLEmail(dataSend),
@@ -106,7 +106,7 @@ let sendAttachment = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        from: '"Đường Đăng Đức 👻" <booking.kltn@gmail.com', // sender address
         to: dataSend.email, // list of receivers
         subject: 'Kết quả đặt lịch khám bệnh ✔', // Subject line
         html: getBodyHTMLEmailRemedy(dataSend),
@@ -128,7 +128,6 @@ let sendAttachment = async (dataSend) => {
   });
 };
 
-
 let sendLink = async (dataSend) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -145,7 +144,7 @@ let sendLink = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        from: '"Đường Đăng Đức 👻" <booking.kltn@gmail.com', // sender address
         to: dataSend.email, // list of receivers
         subject: 'Online clinic room ✔', // Subject line
         html: getBodyHTMLEmailOnlineClinic(dataSend),
@@ -157,7 +156,6 @@ let sendLink = async (dataSend) => {
     }
   });
 };
-
 
 let getBodyHTMLEmailOnlineClinic = (dataSend) => {
   let result = '';
@@ -189,7 +187,6 @@ let getBodyHTMLEmailOnlineClinic = (dataSend) => {
   return result;
 };
 
-
 let sendNotificationBlocked = async (dataSend) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -206,7 +203,7 @@ let sendNotificationBlocked = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        from: '"Đường Đăng Đức 👻" <booking.kltn@gmail.com', // sender address
         to: dataSend.email, // list of receivers
         subject: 'You have been blacklisted ✔', // Subject line
         html: getBodyHTMLEmailBlocked(dataSend),
@@ -218,7 +215,6 @@ let sendNotificationBlocked = async (dataSend) => {
     }
   });
 };
-
 
 let getBodyHTMLEmailBlocked = (dataSend) => {
   let result = '';
@@ -244,11 +240,6 @@ let getBodyHTMLEmailBlocked = (dataSend) => {
   return result;
 };
 
-
-
-
-
-
 let sendPaymentPatient = async (dataSend) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -265,7 +256,7 @@ let sendPaymentPatient = async (dataSend) => {
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
-        from: '"Đường Đăng Đức 👻" <duongdangduc02082000@gmail.com', // sender address
+        from: '"Đường Đăng Đức 👻" <booking.kltn@gmail.com', // sender address
         to: dataSend.email, // list of receivers
         subject: 'Payment success ✔', // Subject line
         html: getBodyHTMLPayment(dataSend),
@@ -309,8 +300,6 @@ let getBodyHTMLPayment = (dataSend) => {
 
   return result;
 };
-
-
 
 module.exports = {
   sendSimpleEmail: sendSimpleEmail,
