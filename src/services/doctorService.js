@@ -101,7 +101,8 @@ let saveDetailInforDoctor = (data) => {
     try {
       let checkObject = checkRequiredFaild(data);
       let check = await db.Doctor_infor.findOne({
-        where: { doctorId: data.doctorId },raw: false
+        where: { doctorId: data.doctorId },
+        raw: false,
       });
 
       if (checkObject.isValid === false) {

@@ -71,16 +71,20 @@ let postBookAppointment = (data) => {
             },
             defaults: {
               statusId: 'S1',
-              doctorId: data.doctorId,
-              patientId: user[0].id,
               date: data.date,
+              patientId: user[0].id,
+              doctorId: data.doctorId,
               timeType: data.timeType,
-              token: token,
               statusPayment: 'Unpaid',
+              token: token,
             },
           });
+        } else {
+          resolve({
+            errCode: 2,
+            errMessage: 'Booking failed !',
+          });
         }
-
         resolve({
           errCode: 0,
           errMessage: 'Save infor patient success !',
@@ -232,6 +236,7 @@ let postPaymentPatient = (data) => {
           errMessage: 'Missing required parameter !',
         });
       } else {
+         
         await emailService.sendPaymentPatient({
           paymentId: data.paymentId,
           email: data.email,
@@ -257,7 +262,7 @@ let postPaymentPatient = (data) => {
         });
         // create a booking
         if (user && user[0]) {
-          await db.Booking.findOrCreate({
+          let booking = await db.Booking.findOrCreate({
             where: {
               patientId: user[0].id,
             },
@@ -270,24 +275,26 @@ let postPaymentPatient = (data) => {
               statusPayment: 'Paid',
             },
           });
-        }
 
-        // insert payment
-        await db.Payment.findOrCreate({
-          where: { paymentId: data.paymentId },
-          defaults: {
-            paymentId: data.paymentId,
-            patientId: user[0].id,
-            email: data.email,
-            email_address: data.email_address,
-            fullName: data.fullName,
-            address: data.address,
-            value: data.value,
-            currency_code: data.currency_code,
-            doctorId: data.doctorId,
-            timeType: data.timeType,
-          },
-        });
+          if (booking && booking[0]) {
+            // insert payment
+            await db.Payment.findOrCreate({
+              where: { paymentId: data.paymentId },
+              defaults: {
+                paymentId: data.paymentId,
+                patientId: user[0].id,
+                email: data.email,
+                email_address: data.email_address,
+                fullName: data.fullName,
+                address: data.address,
+                value: data.value,
+                currency_code: data.currency_code,
+                doctorId: data.doctorId,
+                timeType: data.timeType,
+              },
+            });
+          }
+        }
 
         resolve({
           errCode: 0,
